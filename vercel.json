@@ -1,0 +1,12 @@
+{
+  "regions": ["sin1"],
+  "functions": {
+    "api/tra-cuu.js": {
+      "maxDuration": 20
+    }
+  },
+  "routes": [
+    { "src": "/api/tra-cuu", "dest": "/api/tra-cuu.js" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ]
+}
