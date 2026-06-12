@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tra Cứu Điểm Thi Lớp 10 Đà Nẵng 2025–2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; }
+    canvas { image-rendering: pixelated; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-start justify-center py-8 px-4">
+
+  <div class="w-full max-w-md space-y-6">
+
+    <!-- Header -->
+    <div class="text-center">
+      <div class="text-4xl mb-2">🎓</div>
+      <h1 class="text-2xl font-bold text-indigo-800 leading-tight">
+        Tra Cứu Điểm Thi Lớp 10
+      </h1>
+      <p class="text-indigo-500 text-sm mt-1">Thành phố Đà Nẵng · Năm học 2025–2026</p>
+    </div>
+
+    <!-- Form card -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-5">
+      <form id="searchForm" class="space-y-4" novalidate>
+
+        <!-- Số báo danh -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Số báo danh
+          </label>
+          <input
+            id="sbdInput"
+            type="text"
+            inputmode="numeric"
+            placeholder="Nhập số báo danh…"
+            autocomplete="off"
+            class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-800
+                   focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent
+                   placeholder-gray-400"
+          />
+        </div>
+
+        <!-- Captcha -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Mã xác nhận
+          </label>
+          <div class="flex items-center gap-3">
+            <canvas
+              id="captchaCanvas"
+              width="130" height="48"
+              class="rounded-lg border border-gray-200 flex-shrink-0"
+            ></canvas>
+            <button
+              type="button"
+              id="btnRefreshCaptcha"
+              title="Đổi mã"
+              class="text-indigo-500 hover:text-indigo-700 transition text-xl select-none"
+            >⟳</button>
+          </div>
+          <input
+            id="captchaInput"
+            type="text"
+            maxlength="4"
+            placeholder="Nhập mã ở trên…"
+            autocomplete="off"
+            spellcheck="false"
+            class="mt-2 w-full border border-gray-300 rounded-xl px-4 py-2.5 text-gray-800
+                   tracking-widest uppercase focus:outline-none focus:ring-2
+                   focus:ring-indigo-400 focus:border-transparent placeholder-gray-400"
+          />
+        </div>
+
+        <!-- Submit -->
+        <button
+          id="btnSearch"
+          type="submit"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800
+                 text-white font-semibold rounded-xl py-3 transition
+                 disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          Tra cứu
+        </button>
+      </form>
+    </div>
+
+    <!-- Error -->
+    <div
+      id="errorSection"
+      class="hidden bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm"
+    ></div>
+
+    <!-- Result -->
+    <div id="resultSection" class="hidden bg-white rounded-2xl shadow-lg overflow-hidden">
+
+      <!-- Header kết quả -->
+      <div class="bg-indigo-600 px-6 py-4 text-white">
+        <p class="text-xs opacity-75 uppercase tracking-wide">Kết quả tra cứu</p>
+        <p class="text-xl font-bold mt-0.5" id="resHoTen">—</p>
+        <p class="text-sm opacity-80 mt-0.5">SBD: <span id="resSBD"></span></p>
+      </div>
+
+      <div class="p-6 space-y-5">
+
+        <!-- Bảng điểm các môn -->
+        <div>
+          <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            Điểm từng môn
+          </h2>
+          <table class="w-full">
+            <tbody id="diemBody"></tbody>
+          </table>
+        </div>
+
+        <hr class="border-gray-100" />
+
+        <!-- Tổng điểm THPT đại trà — highlight -->
+        <div class="bg-indigo-50 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-indigo-500 uppercase tracking-wide font-medium">
+              Tổng điểm xét tuyển
+            </p>
+            <p class="text-sm text-indigo-700 font-medium">THPT Đại trà</p>
+          </div>
+          <span
+            id="tongDaiTra"
+            class="text-3xl font-bold text-indigo-700"
+          >—</span>
+        </div>
+
+        <!-- Tổng điểm Chuyên (ẩn nếu null) -->
+        <div id="secChuyen" class="hidden bg-amber-50 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-amber-500 uppercase tracking-wide font-medium">
+              Tổng điểm xét tuyển
+            </p>
+            <p class="text-sm text-amber-700 font-medium">THPT Chuyên</p>
+          </div>
+          <span id="tongChuyen" class="text-3xl font-bold text-amber-600">—</span>
+        </div>
+
+        <!-- Tổng điểm PTDTNT (ẩn nếu null) -->
+        <div id="secPtdtnt" class="hidden bg-emerald-50 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-xs text-emerald-500 uppercase tracking-wide font-medium">
+              Tổng điểm xét tuyển
+            </p>
+            <p class="text-sm text-emerald-700 font-medium">PTDTNT THPT Quảng Nam</p>
+          </div>
+          <span id="tongPtdtnt" class="text-3xl font-bold text-emerald-600">—</span>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 pb-4">
+      Nguồn dữ liệu: tracuudiem.danang.gov.vn
+    </p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
