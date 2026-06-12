@@ -1,0 +1,7 @@
+{
+  "name": "danang-tracuu",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
